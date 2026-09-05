@@ -5,5 +5,5 @@ export const profile = {
   linkedin: "https://www.linkedin.com/in/yusufcanozan",
   x: "",
   email: "yusufcanozan9@gmail.com",
-  siteUrl: "https://can-ozan-portfolio.prime-hare-5416.chatgpt.site",
+  siteUrl: "https://can-ozan-portfolio.ozanyusufcan33.chatgpt.site",
 };
