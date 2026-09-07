@@ -1,6 +1,7 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
+import { PROJECT_DIALOG_CHANGE } from "./modal-events";
 
 const EASE = "power3.out";
 const REVEAL_DISTANCE = 42;
@@ -34,12 +35,12 @@ export function initializeAnimations() {
         gsap.ticker.lagSmoothing(0);
       }
 
-      const syncDialog = (event: Event) => {
-        if (!(event.target instanceof HTMLDialogElement)) return;
+      const syncDialog = () => {
         if (document.querySelector("dialog[open]")) lenis?.stop();
         else lenis?.start();
       };
-      document.addEventListener("toggle", syncDialog, true);
+      document.addEventListener(PROJECT_DIALOG_CHANGE, syncDialog);
+      syncDialog();
 
       gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((element) => {
         gsap.from(element, {
@@ -67,18 +68,29 @@ export function initializeAnimations() {
             { backgroundColor: "#191916", color: "#f0eee6", ease: "none" },
             0,
           )
-          .to(".hero-title", { y: 100, opacity: 0.15, ease: "none" }, 0)
           .to(
-            ".poster-left",
-            { x: -85, y: -100, rotation: -22, ease: "none" },
-            0,
-          )
-          .to(".poster-right", { x: 90, y: -65, rotation: 22, ease: "none" }, 0)
-          .to(
-            ".poster-center",
-            { y: -95, scale: 0.9, rotation: 3, ease: "none" },
+            ".hero-title",
+            { y: 80, scale: 0.96, opacity: 0.15, ease: "none" },
             0,
           );
+        const posters = [
+          {
+            selector: ".poster-left",
+            values: { x: -85, y: -100, rotation: -22 },
+          },
+          {
+            selector: ".poster-right",
+            values: { x: 90, y: -65, rotation: 22 },
+          },
+          {
+            selector: ".poster-center",
+            values: { y: -95, scale: 0.9, rotation: 3 },
+          },
+        ];
+        for (const { selector, values } of posters) {
+          const poster = document.querySelector(selector);
+          if (poster) transition.to(poster, { ...values, ease: "none" }, 0);
+        }
 
         const stage = document.querySelector<HTMLElement>(".hero-stage");
         if (stage) {
@@ -94,6 +106,7 @@ export function initializeAnimations() {
                 ease: EASE,
               }),
               x: gsap.quickTo(element, "x", { duration: 0.7, ease: EASE }),
+              y: gsap.quickTo(element, "y", { duration: 0.7, ease: EASE }),
               depth: (index + 1) * 0.4,
             }));
           const move = (event: PointerEvent) => {
@@ -104,6 +117,7 @@ export function initializeAnimations() {
               tilt.rotateX(-y * 5 * tilt.depth);
               tilt.rotateY(x * 6 * tilt.depth);
               tilt.x(x * 12 * tilt.depth);
+              tilt.y(y * 8 * tilt.depth);
             });
           };
           const leave = () =>
@@ -111,6 +125,7 @@ export function initializeAnimations() {
               tilt.rotateX(0);
               tilt.rotateY(0);
               tilt.x(0);
+              tilt.y(0);
             });
           stage.addEventListener("pointermove", move, { passive: true });
           stage.addEventListener("pointerleave", leave);
@@ -122,6 +137,13 @@ export function initializeAnimations() {
       }
 
       // Refresh after self-hosted fonts settle without taking over browser scroll restoration.
+      gsap.from(".manifesto-line > span", {
+        yPercent: 105,
+        duration: 0.85,
+        stagger: 0.12,
+        ease: EASE,
+        scrollTrigger: { trigger: ".manifesto", start: "top 86%", once: true },
+      });
       let alive = true;
       void document.fonts.ready.then(() => {
         if (alive) ScrollTrigger.refresh();
@@ -135,7 +157,7 @@ export function initializeAnimations() {
         alive = false;
         cleanups.forEach((cleanup) => cleanup());
         window.removeEventListener("pageshow", restore);
-        document.removeEventListener("toggle", syncDialog, true);
+        document.removeEventListener(PROJECT_DIALOG_CHANGE, syncDialog);
         gsap.ticker.remove(ticker);
         lenis?.destroy();
       };

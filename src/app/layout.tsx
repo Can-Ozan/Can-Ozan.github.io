@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Archivo, DM_Mono } from "next/font/google";
 import { profile } from "@/data/profile";
 import "./globals.css";
+import "./github-portfolio.css";
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -15,12 +16,13 @@ const mono = DM_Mono({
   display: "swap",
 });
 const description =
-  "Portfolio of Yusuf Can Ozan, a web developer focused on modern, high-performance and interactive web experiences.";
+  "Web developer portfolio of Yusuf Can Ozan featuring web applications, developer tools, security projects and software experiments.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(profile.siteUrl),
   title: "Yusuf Can Ozan — Web Developer",
   description,
+  alternates: { canonical: "/" },
   authors: [{ name: profile.name, url: profile.github }],
   openGraph: {
     title: "Yusuf Can Ozan — Web Developer",
@@ -29,11 +31,20 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: profile.siteUrl,
     siteName: "Can–Ozan",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Can–Ozan — Web Developer. Build. Learn. Ship.",
+      },
+    ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Yusuf Can Ozan — Web Developer",
     description,
+    images: ["/og-image.png"],
   },
   robots: { index: true, follow: true },
 };

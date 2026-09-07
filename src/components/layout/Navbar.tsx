@@ -10,11 +10,17 @@ export function Navbar() {
         <a href="#work">
           Work <span>01</span>
         </a>
+        <a href="#tools">
+          Stack <span>02</span>
+        </a>
         <a href="#about">
-          About <span>02</span>
+          About <span>03</span>
+        </a>
+        <a href="#github">
+          GitHub <span>04</span>
         </a>
         <a href="#contact">
-          Let’s talk <ArrowUpRight size={15} />
+          Contact <ArrowUpRight size={15} />
         </a>
       </nav>
     </header>

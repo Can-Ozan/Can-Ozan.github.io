@@ -8,7 +8,9 @@
     "start": "node scripts/serve.mjs",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "format": "prettier --write src next.config.ts postcss.config.mjs eslint.config.mjs tsconfig.json"
+    "verify:export": "node scripts/verify-export.mjs",
+    "format": "prettier --write src scripts next.config.ts postcss.config.mjs eslint.config.mjs tsconfig.json",
+    "preview": "node scripts/serve.mjs"
   },
   "keywords": [],
   "author": "",
@@ -21,7 +23,8 @@
     "lucide-react": "^1.41.0",
     "next": "^16.3.4",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
@@ -34,5 +37,8 @@
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3"
   },
-  "private": true
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  }
 }

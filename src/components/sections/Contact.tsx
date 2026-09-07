@@ -16,7 +16,7 @@ export function Contact() {
       id="contact"
       aria-labelledby="contact-title"
     >
-      <SectionLabel index="05">Have something in mind?</SectionLabel>
+      <SectionLabel index="05">Contact / Have something in mind?</SectionLabel>
       <a
         className="contact-headline-link"
         href={`mailto:${profile.email}`}
@@ -37,6 +37,7 @@ export function Contact() {
           <MagneticButton
             href={`mailto:${profile.email}`}
             className="contact-email"
+            data-cursor="SAY HI"
           >
             {profile.email}
             <ArrowUpRight size={22} />
@@ -44,9 +45,16 @@ export function Contact() {
         </div>
         <div className="social-links">
           {socials.map((social) => (
-            <a
+            <MagneticButton
               key={social.label}
               href={social.href}
+              data-cursor={
+                social.label === "GitHub"
+                  ? "GITHUB ↗"
+                  : social.label === "Email"
+                    ? "SAY HI"
+                    : "OPEN ↗"
+              }
               target={social.href.startsWith("mailto:") ? undefined : "_blank"}
               rel={
                 social.href.startsWith("mailto:")
@@ -56,7 +64,7 @@ export function Contact() {
             >
               {social.label}
               <ArrowUpRight size={15} />
-            </a>
+            </MagneticButton>
           ))}
         </div>
       </div>

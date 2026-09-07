@@ -9,9 +9,9 @@ export function SectionLabel({
 }) {
   return (
     <div className={`section-label ${className}`}>
-      <span className="section-dot" />
+      <span className="section-number">{index} /</span>
       <span>{children}</span>
-      <span className="section-number">/{index}</span>
+      <span className="section-dot" />
     </div>
   );
 }

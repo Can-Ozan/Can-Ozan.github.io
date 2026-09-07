@@ -35,31 +35,6 @@
   margin-top: 0;
   width: 85%;
 }
-.project:nth-child(5) .project-art {
-  aspect-ratio: 2;
-}
-.project:nth-child(5) .sandbox-layout {
-  padding: 1% 10% 0;
-}
-.project:nth-child(5) .sandbox-headline {
-  font-size: 13cqw;
-}
-.project:nth-child(5) .orbit-object {
-  width: 33%;
-}
-.project:nth-child(5) .art-topline > span:first-child {
-  font-size: 1.7cqw;
-}
-.project:nth-child(5) .art-topline > span:last-child,
-.project:nth-child(5) .art-bottomline {
-  font-size: 1cqw;
-}
-.project:nth-child(5) .sandbox-caption {
-  font-size: 1.3cqw;
-}
-.project:nth-child(5) .project-art {
-  padding: 4%;
-}
 .project-visual {
   width: 100%;
   display: block;
@@ -197,24 +172,6 @@
 .project-links a:hover {
   color: var(--red);
 }
-.work-end {
-  border-top: 1px solid var(--line);
-  padding-top: 24px;
-  margin-top: 100px;
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  font: 10px var(--font-dm-mono);
-  color: var(--muted);
-}
-.project-image {
-  width: 100%;
-  aspect-ratio: 1.22;
-  position: relative;
-}
-.project-image img {
-  object-fit: cover;
-}
 .project-dialog {
   position: fixed;
   inset: 0;
@@ -305,9 +262,6 @@
   background: #e9e8df;
   color: var(--ink);
   padding: 90px var(--gutter) 105px;
-}
-.tools-section .section-number {
-  color: #706f66;
 }
 .tools-heading {
   font-size: clamp(55px, 8vw, 130px);
@@ -552,14 +506,6 @@
   letter-spacing: -0.04em;
   line-height: 1.2;
 }
-.github-aside > .github-small {
-  max-width: 300px;
-  font-size: 16px;
-  line-height: 1.65;
-  letter-spacing: 0;
-  color: var(--muted);
-  margin-top: 22px;
-}
 .github-aside > .text-link {
   margin-top: 32px;
   min-width: 210px;
@@ -574,26 +520,11 @@
   gap: 8px;
   color: #b5baa9;
 }
-.github-activity {
-  padding: 0;
-  list-style: none;
-  margin-top: 24px;
-}
-.github-activity li a {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 8px 0;
-  font-size: 14px;
-}
 .contact-section {
   background: var(--red);
   color: var(--ink);
   padding: 80px var(--gutter) 75px;
   overflow: hidden;
-}
-.contact-section .section-number {
-  color: var(--ink);
 }
 .contact-headline-link {
   display: block;
@@ -852,31 +783,6 @@
     width: 100%;
     grid-column: auto;
   }
-  .project:nth-child(5) .project-art {
-    aspect-ratio: 1.22;
-    padding: 6%;
-  }
-  .project:nth-child(5) .sandbox-layout {
-    padding: 0;
-  }
-  .project:nth-child(5) .sandbox-headline {
-    font-size: 17cqw;
-  }
-  .project:nth-child(5) .orbit-object {
-    width: 46%;
-  }
-  .project:nth-child(5) .art-topline > span:first-child {
-    font-size: 3cqw;
-  }
-  .project:nth-child(5) .art-topline > span:last-child {
-    font-size: 1.6cqw;
-  }
-  .project:nth-child(5) .art-bottomline {
-    font-size: 1.65cqw;
-  }
-  .project:nth-child(5) .sandbox-caption {
-    font-size: 2.1cqw;
-  }
   .project-meta {
     font-size: 9px;
     margin-top: 19px;
@@ -901,13 +807,6 @@
   .project-links a {
     font-size: 11px;
     min-height: 30px;
-  }
-  .work-end {
-    margin-top: 50px;
-    font-size: 8px;
-  }
-  .work-end > span:last-child {
-    display: none;
   }
   .preview-open {
     right: 13px;
@@ -1056,11 +955,6 @@
   }
   .github-aside > p {
     font-size: 27px;
-  }
-  .github-aside > .github-small {
-    font-size: 16px;
-    max-width: 100%;
-    margin-top: 15px;
   }
   .github-aside > .text-link {
     margin-top: 25px;

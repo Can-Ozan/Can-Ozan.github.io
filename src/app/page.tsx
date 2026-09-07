@@ -7,21 +7,32 @@ import { Github } from "@/components/sections/Github";
 import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/layout/Footer";
 import { MotionController } from "@/components/layout/MotionController";
+import { getGithubPortfolio } from "@/lib/github/client";
+import { ProjectExperience } from "@/components/ui/ProjectExperience";
+import { Manifesto } from "@/components/sections/Manifesto";
 
-export default function Home() {
+export default async function Home() {
+  const data = await getGithubPortfolio();
   return (
-    <>
+    <ProjectExperience>
       <Navbar />
       <main>
-        <Hero />
-        <SelectedWork />
-        <TechStack />
+        <Hero
+          repositories={data.featured}
+          available={data.repositoriesAvailable}
+        />
+        <SelectedWork data={data} />
+        <TechStack
+          languages={data.languages}
+          languagesAvailable={data.languagesAvailable}
+        />
         <About />
-        <Github />
+        <Manifesto />
+        <Github data={data} />
         <Contact />
       </main>
       <Footer />
       <MotionController />
-    </>
+    </ProjectExperience>
   );
 }

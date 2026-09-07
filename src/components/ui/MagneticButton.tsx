@@ -19,8 +19,9 @@ export function MagneticButton({
         )
           return;
         const rect = event.currentTarget.getBoundingClientRect();
+        const clamp = (value: number) => Math.max(-8, Math.min(8, value));
         if (inner.current)
-          inner.current.style.transform = `translate3d(${(event.clientX - rect.left - rect.width / 2) * 0.12}px, ${(event.clientY - rect.top - rect.height / 2) * 0.12}px, 0)`;
+          inner.current.style.transform = `translate3d(${clamp((event.clientX - rect.left - rect.width / 2) * 0.12)}px, ${clamp((event.clientY - rect.top - rect.height / 2) * 0.12)}px, 0)`;
       }}
       onPointerLeave={() => {
         if (inner.current) inner.current.style.transform = "translate3d(0,0,0)";

@@ -4,7 +4,9 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 export function About() {
   return (
     <section className="about-section" id="about" aria-labelledby="about-title">
-      <SectionLabel index="03">The person behind the pixels</SectionLabel>
+      <SectionLabel index="03">
+        About / The person behind the pixels
+      </SectionLabel>
       <div className="about-layout">
         <div className="about-note">
           <span className="about-asterisk" aria-hidden="true">
@@ -28,16 +30,22 @@ export function About() {
           </h2>
           <div className="about-copy">
             <p>
-              I’m a web developer focused on building modern, fast and
-              interactive digital experiences. I enjoy turning ideas into
-              polished products using modern web technologies.
+              I’m Can, a web developer from Türkiye. I like building tools,
+              interactive interfaces and experiments that help me understand how
+              things work.
             </p>
             <p>
-              For me, the details are the experience. A considered interaction,
-              a faster page, a simpler way forward. That’s where good code meets
-              good design.
+              Most of my projects begin the same way: find a problem, build
+              something, break it, improve it, ship it. Then find the next thing
+              I don’t understand yet.
             </p>
           </div>
+          <p className="about-verbs">
+            <span>Build.</span>
+            <span>Break.</span>
+            <span>Learn.</span>
+            <em>Ship.</em>
+          </p>
           <div className="about-signature">
             <span>Yusuf Can Ozan</span>
             <span>ALWAYS CURIOUS. ALWAYS BUILDING.</span>

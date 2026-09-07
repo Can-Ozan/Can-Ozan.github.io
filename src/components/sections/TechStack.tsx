@@ -3,6 +3,8 @@
 import { useRef, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { SectionLabel } from "@/components/ui/SectionLabel";
+import { LanguageBreakdown } from "@/components/sections/LanguageBreakdown";
+import type { LanguageShare } from "@/lib/github/types";
 
 const technologies = [
   {
@@ -63,18 +65,25 @@ const technologies = [
   },
 ];
 
-export function TechStack() {
+export function TechStack({
+  languages,
+  languagesAvailable,
+}: {
+  languages: LanguageShare[];
+  languagesAvailable: boolean;
+}) {
   const [active, setActive] = useState(0);
   const shape = useRef<HTMLDivElement>(null);
   const selected = technologies[active];
   return (
     <section className="tools-section" id="tools" aria-labelledby="tools-title">
-      <SectionLabel index="02">The toolkit</SectionLabel>
+      <SectionLabel index="02">Tools</SectionLabel>
       <h2 id="tools-title" className="tools-heading" data-reveal>
         Different tools.
         <br />
         <em>Same intention.</em>
       </h2>
+      <p className="toolkit-subheading eyebrow">TOOLS I USE</p>
       <div className="tools-layout">
         <div
           className="tool-sculpture"
@@ -136,6 +145,7 @@ export function TechStack() {
           ))}
         </ul>
       </div>
+      <LanguageBreakdown languages={languages} available={languagesAvailable} />
     </section>
   );
 }

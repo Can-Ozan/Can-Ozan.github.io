@@ -1,7 +1,27 @@
 import { ArrowDown, ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { ProjectArtwork } from "@/components/ui/ProjectArtwork";
+import { ProjectTrigger } from "@/components/ui/ProjectExperience";
+import type { GithubRepository } from "@/lib/github/types";
+import { GITHUB_UNAVAILABLE } from "@/lib/github/helpers";
 
-export function Hero() {
+export function Hero({
+  repositories,
+  available,
+}: {
+  repositories: GithubRepository[];
+  available: boolean;
+}) {
+  const posters = [1, 2, 0].flatMap((index, slot) =>
+    repositories[index]
+      ? [
+          {
+            repository: repositories[index],
+            index,
+            position: ["poster-left", "poster-right", "poster-center"][slot],
+          },
+        ]
+      : [],
+  );
   return (
     <section className="hero" id="top" aria-labelledby="hero-title">
       <div className="hero-meta">
@@ -19,36 +39,21 @@ export function Hero() {
           I’VE BEEN MAKING <ArrowDownRight size={22} />
         </div>
         <div className="hero-posters">
-          <a
-            href="#readme-studio"
-            className="hero-poster poster-left"
-            data-cursor="VIEW"
-            aria-label="View README.studio project"
-          >
-            <div className="poster-tilt">
-              <ProjectArtwork visual="readme" compact />
-            </div>
-          </a>
-          <a
-            href="#autopilot"
-            className="hero-poster poster-right"
-            data-cursor="VIEW"
-            aria-label="View Autopilot project"
-          >
-            <div className="poster-tilt">
-              <ProjectArtwork visual="automation" compact />
-            </div>
-          </a>
-          <a
-            href="#fileshift"
-            className="hero-poster poster-center"
-            data-cursor="VIEW"
-            aria-label="View FileShift project"
-          >
-            <div className="poster-tilt">
-              <ProjectArtwork visual="converter" compact />
-            </div>
-          </a>
+          {posters.map(({ repository, index, position }) => (
+            <ProjectTrigger
+              key={repository.id}
+              repository={repository}
+              index={index}
+              className={`hero-poster ${position}`}
+            >
+              <span className="poster-tilt">
+                <ProjectArtwork repository={repository} index={index} compact />
+              </span>
+            </ProjectTrigger>
+          ))}
+          {!available && (
+            <p className="hero-data-fallback">{GITHUB_UNAVAILABLE}</p>
+          )}
         </div>
         <div className="stage-edition">
           DESIGNED WITH INTENTION.
