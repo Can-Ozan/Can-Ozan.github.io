@@ -4,7 +4,7 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 export function About() {
   return (
     <section className="about-section" id="about" aria-labelledby="about-title">
-      <SectionLabel index="03">
+      <SectionLabel index="04">
         About / The person behind the pixels
       </SectionLabel>
       <div className="about-layout">
@@ -19,13 +19,17 @@ export function About() {
           <ArrowDownRight size={35} strokeWidth={1} />
         </div>
         <div className="about-main">
-          <h2 id="about-title" data-reveal>
-            I’m Can. I care about
-            <br />
-            how it works.
-            <br />
-            <span>
-              And how it <em>feels.</em>
+          <h2 id="about-title">
+            <span className="about-line">
+              <span>I’m Can. I care about</span>
+            </span>
+            <span className="about-line">
+              <span>how it works.</span>
+            </span>
+            <span className="about-line">
+              <span>
+                And how it <em>feels.</em>
+              </span>
             </span>
           </h2>
           <div className="about-copy">

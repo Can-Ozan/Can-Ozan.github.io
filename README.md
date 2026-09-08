@@ -66,11 +66,13 @@ Selected projects can be expanded into a focused project view containing informa
 - The problem or motivation behind the project
 - Technical approach
 - Technology stack
-- What I learned while building it
+- Author-supplied learning notes, when configured
 - Source code
 - Live deployment
 
 GitHub metrics remain API-driven, while project storytelling can be maintained separately as curated metadata.
+
+Verified implementation notes live in `src/data/projectCaseStudies.ts`; links to supporting source accompany them. Personal learning notes remain unset until the author supplies them. `src/data/siteConfig.ts` controls status, timezone and the portfolio source link; contact URLs live in `src/data/profile.ts`.
 
 ### Interactive Hero
 
@@ -228,7 +230,7 @@ The project aims to keep data fetching, UI components, animations, and curated p
 
 Make sure you have:
 
-- Node.js 20+ recommended
+- Node.js 22 (matches CI; see `.nvmrc`)
 - npm
 
 ### Installation

@@ -6,8 +6,7 @@ export const siteConfig = {
   timezone: "Europe/Istanbul",
   email: profile.email,
   socials: { github: profile.github, linkedin: profile.linkedin, x: profile.x },
-  // Set only when this portfolio's source repository is published.
-  sourceUrl: null as string | null,
+  sourceUrl: "https://github.com/Can-Ozan/Can-Ozan.github.io",
 };
 
 export const chapters = [

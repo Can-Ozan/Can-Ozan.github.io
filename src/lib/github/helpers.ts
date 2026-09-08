@@ -7,6 +7,7 @@ import type {
   PushedRepository,
   RepositoryLanguages,
 } from "./types";
+import { getCaseStudy } from "@/data/projectCaseStudies";
 
 export const GITHUB_USERNAME = "Can-Ozan";
 export const GITHUB_UNAVAILABLE =
@@ -102,6 +103,16 @@ export function getLatestRepository(repositories: GithubRepository[]) {
 }
 
 export function getProjectCategory(repo: GithubRepository): ProjectCategory {
+  const curated = getCaseStudy(repo.full_name)?.category;
+  if (curated)
+    return (
+      {
+        web: "frontend",
+        tools: "tool",
+        security: "security",
+        experiments: "learning",
+      } as const
+    )[curated];
   const words =
     `${repo.name} ${repo.description ?? ""} ${repo.topics.join(" ")}`.toLowerCase();
   if (/security|password|scanner/.test(words)) return "security";

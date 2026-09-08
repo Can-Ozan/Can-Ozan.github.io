@@ -3,12 +3,26 @@ import Image from "next/image";
 import { GithubIcon } from "@/components/ui/GithubIcon";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { RelativeTime } from "@/components/ui/RelativeTime";
-import { GITHUB_UNAVAILABLE } from "@/lib/github/helpers";
+import { GITHUB_UNAVAILABLE, safeHomepage } from "@/lib/github/helpers";
+import { getCaseStudy } from "@/data/projectCaseStudies";
 import { profile } from "@/data/profile";
 import type { GithubPortfolio } from "@/lib/github/types";
 import { RepositoryTicker } from "./RepositoryTicker";
 
 export function Github({ data }: { data: GithubPortfolio }) {
+  const recent = [...data.repositories]
+    .filter((repo) => repo.name.toLowerCase() !== "can-ozan")
+    .sort((a, b) => Date.parse(b.updated_at) - Date.parse(a.updated_at))
+    .slice(0, 4);
+  const shipped = [...data.repositories]
+    .filter(
+      (repo) =>
+        repo.pushed_at &&
+        safeHomepage(repo.homepage) &&
+        safeHomepage(repo.homepage) ===
+          getCaseStudy(repo.full_name)?.verifiedHomepage,
+    )
+    .sort((a, b) => Date.parse(b.pushed_at!) - Date.parse(a.pushed_at!))[0];
   const stats = data.stats
     ? [
         { label: "Repositories", value: data.stats.repositories },
@@ -23,7 +37,7 @@ export function Github({ data }: { data: GithubPortfolio }) {
       id="github"
       aria-labelledby="github-title"
     >
-      <SectionLabel index="04">GitHub / Out in the open</SectionLabel>
+      <SectionLabel index="05">GitHub / Out in the open</SectionLabel>
       <div className="github-layout">
         <h2 id="github-title" data-reveal>
           Building.
@@ -108,6 +122,54 @@ export function Github({ data }: { data: GithubPortfolio }) {
           >
             View repo <ArrowUpRight size={18} />
           </a>
+        </div>
+      )}
+      {recent.length > 0 && (
+        <div className="github-updates">
+          <div className="recent-activity">
+            <h3 className="eyebrow">RECENT ACTIVITY</h3>
+            <ol>
+              {recent.map((repo) => (
+                <li key={repo.id}>
+                  <a
+                    href={repo.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-cursor="GITHUB ↗"
+                  >
+                    <span>{repo.name}</span>
+                    <span>
+                      Updated{" "}
+                      <RelativeTime
+                        date={repo.updated_at}
+                        now={data.fetchedAt}
+                      />
+                      <ArrowUpRight size={16} />
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </div>
+          {shipped && (
+            <div className="last-shipped">
+              <h3 className="eyebrow">LAST SHIPPED</h3>
+              <a
+                href={safeHomepage(shipped.homepage)!}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-cursor="LIVE ↗"
+              >
+                {shipped.name}
+                <ArrowUpRight size={24} />
+              </a>
+              <p>
+                Repository updated{" "}
+                <RelativeTime date={shipped.updated_at} now={data.fetchedAt} />
+              </p>
+              <span className="eyebrow">LIVE PROJECT ↗</span>
+            </div>
+          )}
         </div>
       )}
       {data.repositoriesAvailable && data.repositories.length > 0 && (

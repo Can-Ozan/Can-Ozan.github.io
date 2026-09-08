@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import "lenis/dist/lenis.css";
+import { chapters } from "@/data/siteConfig";
+import { navigateToChapter } from "@/lib/interactions";
 
 const CustomCursor = dynamic(() => import("@/components/ui/CustomCursor"), {
   ssr: false,
@@ -14,8 +16,8 @@ export function MotionController() {
     let teardown: (() => void) | undefined;
     const header = document.querySelector<HTMLElement>(".site-header");
     const hero = document.querySelector<HTMLElement>(".hero");
-    const sections = ["work", "tools", "about", "github", "contact"]
-      .map((id) => document.getElementById(id))
+    const sections = chapters
+      .map(({ id }) => document.getElementById(id))
       .filter((section): section is HTMLElement => !!section);
     const navLinks = Array.from(
       document.querySelectorAll<HTMLAnchorElement>(".site-header nav a"),
@@ -28,12 +30,13 @@ export function MotionController() {
         "is-scrolled",
         window.scrollY > (hero?.offsetHeight ?? 850) * 0.32,
       );
-      const active = sections
-        .filter(
-          (section) =>
-            section.getBoundingClientRect().top <= window.innerHeight * 0.4,
-        )
-        .at(-1)?.id;
+      const active =
+        sections
+          .filter(
+            (section) =>
+              section.getBoundingClientRect().top <= window.innerHeight * 0.4,
+          )
+          .at(-1)?.id ?? "top";
       navLinks.forEach((link) => {
         if (link.hash === `#${active}`)
           link.setAttribute("aria-current", "location");
@@ -52,8 +55,16 @@ export function MotionController() {
         "--scroll-progress",
         String(percentage / 100),
       );
-      const label = progress?.querySelector("span");
-      if (label) label.textContent = String(percentage).padStart(2, "0");
+      const label = progress?.querySelector("[data-progress-value]");
+      if (label) label.textContent = `${String(percentage).padStart(2, "0")}%`;
+      const chapter =
+        chapters.find((item) => item.id === active) ?? chapters[0];
+      const chapterLabel = progress?.querySelector("[data-chapter-label]");
+      if (chapterLabel)
+        chapterLabel.textContent = `${chapter.number} / ${chapter.label.toUpperCase()}`;
+      document
+        .querySelector<HTMLElement>(".floating-back-top")
+        ?.toggleAttribute("hidden", window.scrollY < window.innerHeight * 1.3);
     };
     const scheduleUpdate = () => {
       if (!frame) frame = requestAnimationFrame(updateHeader);
@@ -61,6 +72,27 @@ export function MotionController() {
     updateHeader();
     window.addEventListener("scroll", scheduleUpdate, { passive: true });
     window.addEventListener("resize", scheduleUpdate);
+    const navigate = (event: MouseEvent) => {
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.ctrlKey ||
+        event.metaKey ||
+        event.shiftKey ||
+        event.altKey
+      )
+        return;
+      const link =
+        event.target instanceof Element
+          ? event.target.closest<HTMLAnchorElement>('a[href^="#"]')
+          : null;
+      const id = link?.hash.slice(1);
+      if (id && document.getElementById(id)) {
+        event.preventDefault();
+        navigateToChapter(id);
+      }
+    };
+    document.addEventListener("click", navigate);
     void import("@/lib/animations").then(({ initializeAnimations }) => {
       if (!disposed) teardown = initializeAnimations();
     });
@@ -70,17 +102,22 @@ export function MotionController() {
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", scheduleUpdate);
       window.removeEventListener("resize", scheduleUpdate);
+      document.removeEventListener("click", navigate);
     };
   }, []);
   return (
     <>
       <CustomCursor />
       <div className="scroll-progress" aria-hidden="true">
-        <span>00</span>
+        <span data-chapter-label>01 / INTRO</span>
         <div>
           <i />
         </div>
+        <span data-progress-value>00%</span>
       </div>
+      <a className="floating-back-top" href="#top" hidden data-cursor="BACK">
+        ↑ TOP
+      </a>
     </>
   );
 }

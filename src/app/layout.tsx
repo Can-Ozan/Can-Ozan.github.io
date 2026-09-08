@@ -3,6 +3,7 @@ import { Archivo, DM_Mono } from "next/font/google";
 import { profile } from "@/data/profile";
 import "./globals.css";
 import "./github-portfolio.css";
+import "./interactions.css";
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -22,6 +23,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(profile.siteUrl),
   title: "Yusuf Can Ozan — Web Developer",
   description,
+  referrer: "strict-origin-when-cross-origin",
   alternates: { canonical: "/" },
   authors: [{ name: profile.name, url: profile.github }],
   openGraph: {

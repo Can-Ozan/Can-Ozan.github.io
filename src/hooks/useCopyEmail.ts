@@ -9,12 +9,16 @@ export function useCopyEmail() {
   const alive = useRef(true);
   useEffect(() => {
     alive.current = true;
-    return () => { alive.current = false; if (timer.current) clearTimeout(timer.current); };
+    return () => {
+      alive.current = false;
+      if (timer.current) clearTimeout(timer.current);
+    };
   }, []);
   const copy = useCallback(async () => {
     if (timer.current) clearTimeout(timer.current);
     try {
-      if (!navigator.clipboard?.writeText) throw new Error("Clipboard unavailable");
+      if (!navigator.clipboard?.writeText)
+        throw new Error("Clipboard unavailable");
       await navigator.clipboard.writeText(siteConfig.email);
       if (!alive.current) return;
       setStatus("copied");

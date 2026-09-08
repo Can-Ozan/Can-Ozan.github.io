@@ -43,7 +43,9 @@ jobs:
       - name: Lint
         run: npm run lint
       - name: Build static portfolio with fresh GitHub data
-        run: npm run build
+        run: |
+          npm run build
+          npm run security:check
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Verify static output

@@ -3,7 +3,7 @@ export const profile = {
   displayName: "Can–Ozan",
   github: "https://github.com/Can-Ozan",
   linkedin: "https://www.linkedin.com/in/yusufcanozan",
-  x: "",
+  x: "https://x.com/yusfcnozn",
   email: "yusufcanozan9@gmail.com",
   siteUrl: "https://can-ozan.github.io",
 };

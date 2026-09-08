@@ -8,4 +8,9 @@ dist/
 !.env.example
 *.tsbuildinfo
 *.log
+*.pem
+*.key
+*.p12
+*.pfx
+coverage/
 .DS_Store

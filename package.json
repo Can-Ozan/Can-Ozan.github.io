@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "verify:export": "node scripts/verify-export.mjs",
+    "security:check": "node scripts/security-check.mjs",
     "format": "prettier --write src scripts next.config.ts postcss.config.mjs eslint.config.mjs tsconfig.json",
     "preview": "node scripts/serve.mjs"
   },

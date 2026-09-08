@@ -1,6 +1,7 @@
 import { ArrowDown, ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { ProjectArtwork } from "@/components/ui/ProjectArtwork";
 import { ProjectTrigger } from "@/components/ui/ProjectExperience";
+import { siteConfig } from "@/data/siteConfig";
 import type { GithubRepository } from "@/lib/github/types";
 import { GITHUB_UNAVAILABLE } from "@/lib/github/helpers";
 
@@ -29,7 +30,9 @@ export function Hero({
         <span className="hero-meta-right">PORTFOLIO — VOL. 01 / 2026</span>
       </div>
       <h1 className="hero-title" id="hero-title" aria-label="Yusuf Can Ozan">
-        CAN<span className="hero-dash">—</span>OZAN
+        <span className="hero-name">
+          CAN<span className="hero-dash">—</span>OZAN
+        </span>
         <span className="hero-title-dot">®</span>
       </h1>
       <div className="hero-stage">
@@ -87,7 +90,7 @@ export function Hero({
       </div>
       <div className="hero-footnote">
         <span>
-          <i className="status-dot" /> OPEN TO GOOD CONVERSATIONS
+          <i className="status-dot" /> {siteConfig.availabilityStatus}
         </span>
         <span>
           CODE. CRAFT. A LITTLE CHARACTER. <ArrowUpRight size={13} />

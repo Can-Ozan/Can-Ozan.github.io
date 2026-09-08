@@ -12,7 +12,9 @@ export default function CustomCursor() {
 
   useEffect(() => {
     const node = cursor.current;
-    const media = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const media = window.matchMedia(
+      "(min-width: 901px) and (hover: hover) and (pointer: fine)",
+    );
     if (!node || reduced || !media.matches) return;
     let frame = 0;
     let x = 0;

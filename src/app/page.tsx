@@ -10,6 +10,7 @@ import { MotionController } from "@/components/layout/MotionController";
 import { getGithubPortfolio } from "@/lib/github/client";
 import { ProjectExperience } from "@/components/ui/ProjectExperience";
 import { Manifesto } from "@/components/sections/Manifesto";
+import { ProjectHoverPreview } from "@/components/ui/ProjectHoverPreview";
 
 export default async function Home() {
   const data = await getGithubPortfolio();
@@ -33,6 +34,7 @@ export default async function Home() {
       </main>
       <Footer />
       <MotionController />
+      <ProjectHoverPreview repositories={data.repositories} />
     </ProjectExperience>
   );
 }

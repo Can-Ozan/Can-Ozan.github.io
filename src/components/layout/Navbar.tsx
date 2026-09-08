@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
+import { CommandPalette } from "@/components/ui/CommandPalette";
 
 export function Navbar() {
   return (
@@ -8,21 +9,22 @@ export function Navbar() {
       </a>
       <nav aria-label="Main navigation">
         <a href="#work">
-          Work <span>01</span>
+          Work <span>02</span>
         </a>
         <a href="#tools">
-          Stack <span>02</span>
+          Stack <span>03</span>
         </a>
         <a href="#about">
-          About <span>03</span>
+          About <span>04</span>
         </a>
         <a href="#github">
-          GitHub <span>04</span>
+          GitHub <span>05</span>
         </a>
         <a href="#contact">
           Contact <ArrowUpRight size={15} />
         </a>
       </nav>
+      <CommandPalette />
     </header>
   );
 }

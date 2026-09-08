@@ -102,3 +102,4 @@ for (const [route, data] of Object.entries(manifest.routes)) {
 console.log(
   `Static export verified: ${files.length} files, ${references.size} local links/assets, metadata, fonts, and no client GitHub token/API code.`,
 );
+await import("./security-check.mjs");

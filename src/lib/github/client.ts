@@ -20,6 +20,8 @@ import type {
 const API = "https://api.github.com";
 const REQUEST_TIMEOUT = 10_000;
 const API_VERSION = "2026-03-10";
+const MAX_LANGUAGE_REPOSITORIES = 60;
+const MAX_DISPLAY_REPOSITORIES = 60;
 
 function record(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -154,6 +156,7 @@ async function githubRequest(path: string): Promise<Response> {
     headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
   const response = await fetch(`${API}${path}`, {
     headers,
+    redirect: "error",
     // Default uncached fetch runs during static prerendering. React cache above
     // deduplicates calls within this build; no persisted data cache or runtime ISR.
     signal: AbortSignal.timeout(REQUEST_TIMEOUT),
@@ -190,7 +193,7 @@ export const getGithubRepositories = cache(
           `/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated&page=${page}`,
         );
         const payload: unknown = await response.json();
-        if (!Array.isArray(payload))
+        if (!Array.isArray(payload) || payload.length > 100)
           throw new Error("Invalid GitHub repository collection");
         repositories.push(
           ...payload
@@ -238,7 +241,7 @@ export const getRepositoryLanguages = cache(
       return { ok: true, data: totals };
     } catch {
       console.warn(
-        `[GitHub build] Languages unavailable for ${repositoryName}; incomplete language percentages will be omitted.`,
+        "[GitHub build] Languages unavailable; incomplete language percentages will be omitted.",
       );
       return { ok: false, error: GITHUB_UNAVAILABLE };
     }
@@ -254,7 +257,11 @@ export const getGithubPortfolio = cache(async (): Promise<GithubPortfolio> => {
   const owned = getOwnedRepositories(all);
   const languages: GithubResult<RepositoryLanguages>[] = [];
   // A small concurrency limit keeps the languages endpoint below GitHub's secondary limits.
-  for (let index = 0; index < owned.length; index += 4)
+  for (
+    let index = 0;
+    owned.length <= MAX_LANGUAGE_REPOSITORIES && index < owned.length;
+    index += 4
+  ) {
     languages.push(
       ...(await Promise.all(
         owned
@@ -262,11 +269,15 @@ export const getGithubPortfolio = cache(async (): Promise<GithubPortfolio> => {
           .map((repo) => getRepositoryLanguages(repo.name)),
       )),
     );
+    if (languages.some((result) => !result.ok)) break;
+  }
   const languagesAvailable =
-    repositories.ok && languages.every((result) => result.ok);
+    repositories.ok &&
+    owned.length <= MAX_LANGUAGE_REPOSITORIES &&
+    languages.every((result) => result.ok);
   return {
     user: user.ok ? user.data : null,
-    repositories: owned,
+    repositories: owned.slice(0, MAX_DISPLAY_REPOSITORIES),
     featured: getFeaturedRepositories(all),
     stats: user.ok && repositories.ok ? getGithubStats(user.data, all) : null,
     languages: languagesAvailable

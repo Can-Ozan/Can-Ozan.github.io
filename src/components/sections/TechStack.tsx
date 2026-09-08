@@ -77,7 +77,7 @@ export function TechStack({
   const selected = technologies[active];
   return (
     <section className="tools-section" id="tools" aria-labelledby="tools-title">
-      <SectionLabel index="02">Tools</SectionLabel>
+      <SectionLabel index="03">Tools</SectionLabel>
       <h2 id="tools-title" className="tools-heading" data-reveal>
         Different tools.
         <br />

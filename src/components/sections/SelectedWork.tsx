@@ -7,7 +7,7 @@ import type { GithubPortfolio } from "@/lib/github/types";
 export function SelectedWork({ data }: { data: GithubPortfolio }) {
   return (
     <section className="work-section" id="work" aria-labelledby="work-title">
-      <SectionLabel index="01">Selected work</SectionLabel>
+      <SectionLabel index="02">Selected work</SectionLabel>
       <div className="work-heading-row">
         <h2 className="section-heading" id="work-title" data-reveal>
           Selected <em>work.</em>

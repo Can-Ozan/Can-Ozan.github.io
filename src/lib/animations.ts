@@ -2,6 +2,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { PROJECT_DIALOG_CHANGE } from "./modal-events";
+import { NAVIGATE_CHAPTER } from "./interactions";
 
 const EASE = "power3.out";
 const REVEAL_DISTANCE = 42;
@@ -41,12 +42,41 @@ export function initializeAnimations() {
       };
       document.addEventListener(PROJECT_DIALOG_CHANGE, syncDialog);
       syncDialog();
+      const navigate = (event: Event) => {
+        if (!lenis || !(event instanceof CustomEvent)) return;
+        const target = document.getElementById(event.detail.id);
+        if (target) {
+          event.preventDefault();
+          lenis.scrollTo(target, {
+            offset: window.innerWidth > 700 ? -100 : -75,
+          });
+        }
+      };
+      document.addEventListener(NAVIGATE_CHAPTER, navigate);
+
+      let showIntro = !window.location.hash && window.scrollY < 10;
+      try {
+        if (sessionStorage.getItem("portfolio:intro-seen")) showIntro = false;
+        else sessionStorage.setItem("portfolio:intro-seen", "1");
+      } catch {
+        showIntro = false;
+      }
+      if (showIntro) {
+        gsap.from(".hero-name", { yPercent: 105, duration: 0.85, ease: EASE });
+        gsap.from(".hero-intro", {
+          opacity: 0,
+          y: 12,
+          duration: 0.45,
+          delay: 0.3,
+          ease: EASE,
+        });
+      }
 
       gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((element) => {
         gsap.from(element, {
           y: desktop ? REVEAL_DISTANCE : 18,
           opacity: 0,
-          duration: 0.8,
+          duration: 0.55,
           ease: EASE,
           scrollTrigger: { trigger: element, start: "top 94%", once: true },
         });
@@ -54,6 +84,43 @@ export function initializeAnimations() {
 
       const cleanups: (() => void)[] = [];
       if (desktop) {
+        gsap.utils
+          .toArray<HTMLElement>(
+            ".site-header nav a, .contact-headline-link, .github-aside > .text-link, .project-links a",
+          )
+          .forEach((element) => {
+            const x = gsap.quickTo(element, "x", {
+              duration: 0.25,
+              ease: EASE,
+            });
+            const y = gsap.quickTo(element, "y", {
+              duration: 0.25,
+              ease: EASE,
+            });
+            let bounds: DOMRect | null = null;
+            const enter = () => {
+              bounds = element.getBoundingClientRect();
+            };
+            const move = (event: PointerEvent) => {
+              if (event.pointerType !== "mouse" || !bounds) return;
+              const clamp = (value: number) => Math.max(-6, Math.min(6, value));
+              x(clamp((event.clientX - bounds.left - bounds.width / 2) * 0.08));
+              y(clamp((event.clientY - bounds.top - bounds.height / 2) * 0.08));
+            };
+            const leave = () => {
+              bounds = null;
+              x(0);
+              y(0);
+            };
+            element.addEventListener("pointerenter", enter);
+            element.addEventListener("pointermove", move, { passive: true });
+            element.addEventListener("pointerleave", leave);
+            cleanups.push(() => {
+              element.removeEventListener("pointerenter", enter);
+              element.removeEventListener("pointermove", move);
+              element.removeEventListener("pointerleave", leave);
+            });
+          });
         const transition = gsap.timeline({
           scrollTrigger: {
             trigger: ".hero",
@@ -144,6 +211,13 @@ export function initializeAnimations() {
         ease: EASE,
         scrollTrigger: { trigger: ".manifesto", start: "top 86%", once: true },
       });
+      gsap.from(".about-line > span", {
+        yPercent: 105,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: EASE,
+        scrollTrigger: { trigger: ".about-main", start: "top 86%", once: true },
+      });
       let alive = true;
       void document.fonts.ready.then(() => {
         if (alive) ScrollTrigger.refresh();
@@ -158,6 +232,7 @@ export function initializeAnimations() {
         cleanups.forEach((cleanup) => cleanup());
         window.removeEventListener("pageshow", restore);
         document.removeEventListener(PROJECT_DIALOG_CHANGE, syncDialog);
+        document.removeEventListener(NAVIGATE_CHAPTER, navigate);
         gsap.ticker.remove(ticker);
         lenis?.destroy();
       };

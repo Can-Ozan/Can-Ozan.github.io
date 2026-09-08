@@ -1,4 +1,5 @@
 import { ArrowUp } from "lucide-react";
+import { LocalTime } from "@/components/ui/LocalTime";
 
 export function Footer() {
   return (
@@ -6,7 +7,7 @@ export function Footer() {
       <a href="#top" className="footer-wordmark">
         CAN—OZAN<span>© {new Date().getFullYear()}</span>
       </a>
-      <span>MADE WITH INTENTION & A LITTLE TOO MUCH COFFEE.</span>
+      <LocalTime />
       <a href="#top" className="back-top">
         BACK TO TOP <ArrowUp size={14} />
       </a>

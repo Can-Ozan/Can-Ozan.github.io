@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import { profile } from "@/data/profile";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { MagneticButton } from "@/components/ui/MagneticButton";
+import { CopyEmail } from "@/components/ui/CopyEmail";
 
 export function Contact() {
   const socials = [
@@ -16,7 +17,7 @@ export function Contact() {
       id="contact"
       aria-labelledby="contact-title"
     >
-      <SectionLabel index="05">Contact / Have something in mind?</SectionLabel>
+      <SectionLabel index="06">Contact / Have something in mind?</SectionLabel>
       <a
         className="contact-headline-link"
         href={`mailto:${profile.email}`}
@@ -42,6 +43,7 @@ export function Contact() {
             {profile.email}
             <ArrowUpRight size={22} />
           </MagneticButton>
+          <CopyEmail />
         </div>
         <div className="social-links">
           {socials.map((social) => (

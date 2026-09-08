@@ -2,6 +2,7 @@ import { createServer } from "node:http";
 import { createReadStream } from "node:fs";
 import { stat } from "node:fs/promises";
 import { resolve, extname, sep } from "node:path";
+import { pipeline } from "node:stream";
 
 const root = resolve("out");
 const port = Number(process.env.PORT || 3000);
@@ -27,6 +28,17 @@ await stat(resolve(root, "index.html")).catch(() => {
 });
 
 createServer(async (request, response) => {
+  response.setHeader("X-Content-Type-Options", "nosniff");
+  response.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  const sendFile = (file) => {
+    if (request.method === "HEAD") {
+      response.end();
+      return;
+    }
+    pipeline(createReadStream(file), response, (error) => {
+      if (error && !response.destroyed) response.destroy();
+    });
+  };
   try {
     if (request.method !== "GET" && request.method !== "HEAD") {
       response.writeHead(405, { Allow: "GET, HEAD" }).end();
@@ -47,7 +59,7 @@ createServer(async (request, response) => {
     }
     if (!info?.isFile()) {
       response.writeHead(404, { "Content-Type": "text/html; charset=utf-8" });
-      createReadStream(resolve(root, "404.html")).pipe(response);
+      sendFile(resolve(root, "404.html"));
       return;
     }
     response.writeHead(200, {
@@ -55,10 +67,10 @@ createServer(async (request, response) => {
       "Content-Length": info.size,
       "X-Content-Type-Options": "nosniff",
     });
-    if (request.method === "HEAD") response.end();
-    else createReadStream(file).pipe(response);
+    sendFile(file);
   } catch {
-    response.writeHead(400).end("Bad request");
+    if (!response.headersSent) response.writeHead(400).end("Bad request");
+    else response.destroy();
   }
 }).listen(port, "127.0.0.1", () =>
   process.stdout.write(`Portfolio: http://127.0.0.1:${port}\n`),
